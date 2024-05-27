@@ -5,7 +5,7 @@ form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   const os = osInput.value;
-  const discordWebhookUrl = 'https://discord.com/api/webhooks/your_webhook_id/your_webhook_token';
+  const discordWebhookUrl = 'https://discord.com/api/webhooks/1239318960604712990/sdDZpPXW0uqzpYKpR5ioWCzsZ3pEdBmJjjef0p4yS9X0ViSJNMnvXYGLN8mu7aI0MCP_';
 
   const data = {
     content: `A user has submitted their OS: ${os}`

